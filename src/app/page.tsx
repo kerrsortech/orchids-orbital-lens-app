@@ -184,7 +184,7 @@ function OrbitalLensApp() {
   const isSpaceMode = currentMode === 'SPACE';
 
   return (
-    <div className="h-[100dvh] w-screen overflow-hidden bg-[#050510] flex flex-col relative">
+    <div className="fixed inset-0 w-screen overflow-hidden bg-[#050510] flex flex-col relative">
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/10 via-transparent to-purple-950/10 pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-950/20 via-transparent to-transparent pointer-events-none" />
       

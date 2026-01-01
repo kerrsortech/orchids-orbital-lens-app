@@ -12,6 +12,7 @@ import { SatelliteCard } from '@/components/SatelliteCard';
 import { MissionDock } from '@/components/MissionDock';
 import { QuickStats } from '@/components/QuickStats';
 import { MissionProvider, useMission } from '@/context/MissionContext';
+import { useViewportHeight } from '@/hooks/use-viewport-height';
 
 const Globe3D = dynamic(
   () => import('@/components/globe/Globe3D').then(mod => ({ default: mod.Globe3D })),
@@ -69,6 +70,8 @@ function OrbitalLensApp() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  const viewportHeight = useViewportHeight();
   
   const selectedSatelliteRef = useRef<ProcessedSatellite | null>(null);
   const processingRef = useRef(false);
@@ -184,7 +187,10 @@ function OrbitalLensApp() {
   const isSpaceMode = currentMode === 'SPACE';
 
   return (
-    <div className="relative w-full h-full flex flex-col bg-[#050510]">
+    <div 
+      className="w-screen overflow-hidden bg-[#050510] flex flex-col relative"
+      style={{ height: viewportHeight }}
+    >
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/10 via-transparent to-purple-950/10 pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-950/20 via-transparent to-transparent pointer-events-none" />
       
@@ -259,18 +265,34 @@ function OrbitalLensApp() {
         </div>
       </div>
 
-      {/* Mobile Mission Dock (Bottom Tab Bar) */}
-      <div className="lg:hidden flex-none z-30 pb-safe bg-[#050510]/80 backdrop-blur-md border-t border-white/10 p-2 pb-4">
+      {/* Mobile Bottom Panel - Fixed Height Block */}
+      {!isSpaceMode && (
+        <div className="lg:hidden h-[40%] flex-none flex flex-col bg-[#050510] relative z-30 border-t border-white/10 shadow-2xl">
+          <div className="flex-1 overflow-y-auto glass-scrollbar relative pb-24">
+            {selectedSatellite ? (
+              <SatelliteCardContent 
+                satellite={selectedSatellite} 
+                onClose={() => setSelectedSatellite(null)} 
+                className="h-full"
+              />
+            ) : (
+              <SidebarControls
+                filters={filters}
+                onFilterChange={setFilters}
+                satelliteCounts={satelliteCounts}
+                isLoading={isLoading}
+                onSearchSatellite={handleSearchSatellite}
+                className="h-full"
+              />
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Mission Dock (Fixed Bottom Tab Bar) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe bg-[#050510]/95 backdrop-blur-xl border-t border-white/10 p-2 pb-4 shadow-2xl">
         <MissionDock />
       </div>
     </div>
-  );
-}
-
-export default function Home() {
-  return (
-    <MissionProvider>
-      <OrbitalLensApp />
-    </MissionProvider>
   );
 }

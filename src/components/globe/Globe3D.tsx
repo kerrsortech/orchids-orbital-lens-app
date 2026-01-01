@@ -572,23 +572,13 @@ export const Globe3D = memo(function Globe3D({ satellites, filters, onSatelliteC
         animateIn={false}
       />
       
-      <div className="absolute top-4 right-4 bg-slate-950/90 backdrop-blur-md border border-cyan-500/30 rounded-xl px-4 py-2.5 z-10">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-cyan-500 rounded-full animate-pulse" />
-          <span className="text-cyan-400 text-xs font-mono font-semibold tracking-wider">3D LIVE</span>
-        </div>
-        <div className="text-[10px] text-white/40 mt-1 font-mono">
-          <span className="text-cyan-400/60">SYSTEM STATUS</span>
-        </div>
-      </div>
-      
-      <div className="absolute bottom-24 sm:bottom-28 right-4 bg-slate-950/90 backdrop-blur-md border border-cyan-500/30 rounded-xl px-4 py-2.5 z-10">
+      <div className="absolute top-4 right-4 bg-slate-950/90 backdrop-blur-md border border-cyan-500/30 rounded-xl px-4 py-2.5 z-10 hidden lg:block">
         <span className="text-cyan-400/90 text-xs font-mono font-semibold">
           {objectCount.toLocaleString()} <span className="text-white/40">tracked</span>
         </span>
       </div>
       
-      <div className="absolute bottom-24 sm:bottom-28 left-4 flex flex-wrap gap-2 text-[10px] font-mono z-10 max-w-[200px] sm:max-w-[280px]">
+      <div className="absolute bottom-4 lg:bottom-8 left-4 lg:left-8 flex flex-wrap gap-2 text-[10px] font-mono z-10 max-w-[200px] sm:max-w-[280px]">
         <Legend color="rgb(34, 197, 94)" label="Active" icon="●" />
         <Legend color="rgb(59, 130, 246)" label="Starlink" icon="●" />
         <Legend color="rgb(168, 85, 247)" label="Station" icon="◉" />
@@ -597,7 +587,7 @@ export const Globe3D = memo(function Globe3D({ satellites, filters, onSatelliteC
         {mode === 'LAUNCH' && <Legend color="rgb(255, 200, 100)" label="Launch Site" icon="◎" />}
       </div>
 
-      <div className="absolute top-4 left-4 bg-slate-950/90 backdrop-blur-md border border-cyan-500/30 rounded-xl px-4 py-2.5 max-w-[180px] z-10 hidden lg:block">
+      <div className="absolute bottom-8 right-8 bg-slate-950/90 backdrop-blur-md border border-cyan-500/30 rounded-xl px-4 py-2.5 max-w-[180px] z-10 hidden lg:block">
         <p className="text-cyan-400/80 text-xs font-mono">
           Drag to rotate • Scroll to zoom
         </p>

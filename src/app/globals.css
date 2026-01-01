@@ -502,3 +502,7 @@ nextjs-portal {
     transition-duration: 0.01ms !important;
   }
 }
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}

@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState, useMemo, memo, useCallback } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { getPlanetaryPositions, getMoonPosition, getEarthDayNight } from '@/lib/astronomy-utils';
 
 // ================================

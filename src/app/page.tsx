@@ -5,6 +5,9 @@ import dynamic from 'next/dynamic';
 import type { CelesTrakSatellite, FilterState, ProcessedSatellite } from '@/types/satellite.d';
 import { processSatellites, processSatellitesBatched } from '@/lib/satellite-utils';
 import { SmartSidebar } from '@/components/SmartSidebar';
+import { SidebarControls } from '@/components/SidebarControls';
+import { MobileNavbar } from '@/components/MobileNavbar';
+import { MobileMenu } from '@/components/MobileMenu';
 import { SatelliteCard } from '@/components/SatelliteCard';
 import { MissionDock } from '@/components/MissionDock';
 import { QuickStats } from '@/components/QuickStats';
@@ -65,6 +68,8 @@ function OrbitalLensApp() {
   const [highlightedSatelliteId, setHighlightedSatelliteId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
   const selectedSatelliteRef = useRef<ProcessedSatellite | null>(null);
   const processingRef = useRef(false);
 
@@ -179,21 +184,41 @@ function OrbitalLensApp() {
   const isSpaceMode = currentMode === 'SPACE';
 
   return (
-    <div className="flex h-screen h-[100dvh] w-screen overflow-hidden bg-[#050510] relative">
+    <div className="h-screen w-screen overflow-hidden bg-[#050510] flex flex-col relative">
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/10 via-transparent to-purple-950/10 pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-950/20 via-transparent to-transparent pointer-events-none" />
       
+      {/* Mobile Navbar */}
+      <MobileNavbar 
+        onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+        isMenuOpen={isMobileMenuOpen} 
+      />
+
+      {/* Mobile Sidebar Menu */}
+      <MobileMenu 
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        filters={filters}
+        onFilterChange={setFilters}
+        satelliteCounts={satelliteCounts}
+        isLoading={isLoading}
+        onSearchSatellite={handleSearchSatellite}
+      />
+      
+      {/* Desktop Sidebar (Hidden on Mobile) */}
       {!isSpaceMode && (
-        <SmartSidebar
-          filters={filters}
-          onFilterChange={setFilters}
-          satelliteCounts={satelliteCounts}
-          isLoading={isLoading}
-          onSearchSatellite={handleSearchSatellite}
-        />
+        <div className="hidden lg:block">
+          <SmartSidebar
+            filters={filters}
+            onFilterChange={setFilters}
+            satelliteCounts={satelliteCounts}
+            isLoading={isLoading}
+            onSearchSatellite={handleSearchSatellite}
+          />
+        </div>
       )}
       
-      <div className="flex-1 relative w-full">
+      <div className="flex-1 relative w-full min-h-0">
         {!isSpaceMode && <QuickStats counts={satelliteCounts} />}
         
         {isSpaceMode ? (
@@ -228,6 +253,14 @@ function OrbitalLensApp() {
           />
         )}
 
+        {/* Desktop Mission Dock (Absolute) */}
+        <div className="hidden lg:block absolute bottom-8 left-1/2 -translate-x-1/2 z-50">
+          <MissionDock />
+        </div>
+      </div>
+
+      {/* Mobile Mission Dock (Bottom Tab Bar) */}
+      <div className="lg:hidden z-30 pb-safe bg-[#050510]/80 backdrop-blur-md border-t border-white/10 px-2 pt-2">
         <MissionDock />
       </div>
     </div>
